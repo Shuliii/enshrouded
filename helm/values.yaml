@@ -9,14 +9,14 @@ service:
 
 resources:
   requests:
-    memory: 12G
-    cpu: 4.0
+    memory: 6G
+    cpu: 3
 
 volumes:
   dataPVC:
     # -- Size of the persistent volume
     size: 50Gi
-  storageClassName: ""
+  storageClassName: "do-block-storage"
 
 config:
   # -- Server name
