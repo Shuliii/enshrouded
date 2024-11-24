@@ -35,10 +35,7 @@ spec:
         - name: SERVER_NAME
           value: {{ .Values.config.serverName | squote }}
         - name: SERVER_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "enshrouded.passwordSecretName" . }}
-              key: serverPassword
+          value: {{ .Values.config.serverPassword | squote }}
         - name: GAME_PORT
           value: {{ .Values.config.gamePort | squote }}
         - name: QUERY_PORT
