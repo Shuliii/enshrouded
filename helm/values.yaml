@@ -1,6 +1,6 @@
 image:
   repository: sknnr/enshrouded-dedicated-server
-  tag: v2.0.5
+  tag: latest
 
 service:
   type: LoadBalancer
@@ -11,6 +11,11 @@ resources:
   requests:
     memory: 6G
     cpu: 3
+
+resources2:
+  requests:
+    memory: 13G
+    cpu: 7
 
 volumes:
   dataPVC:
@@ -30,3 +35,6 @@ config:
   # -- Number of server slots
   serverSlots: 16
   externalConfig: 0
+
+config2:
+  serverName: "Enshrouded Sponsored by MAREE"

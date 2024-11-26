@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-2"
+  labels:
+    app: "{{ .Chart.Name }}-2"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Chart.Name }}-2"
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Chart.Name }}-2"
+        release: "{{ .Release.Name }}"
+    spec:
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+      containers:
+      - name: "{{ .Chart.Name }}-2"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.resources2 | indent 10 }}
+        env:
+        - name: SERVER_NAME
+          value: {{ .Values.config2.serverName | squote }}
+        - name: SERVER_PASSWORD
+          value: {{ .Values.config.serverPassword | squote }}
+        - name: GAME_PORT
+          value: {{ .Values.config.gamePort | squote }}
+        - name: QUERY_PORT
+          value: {{ .Values.config.queryPort | squote }}
+        - name: SERVER_SLOTS
+          value: {{ .Values.config.serverSlots | squote }}
+        - name: EXTERNAL_CONFIG
+          value: {{ .Values.config.externalConfig | squote }}
+        ports:
+        - name: game-port
+          containerPort: {{ .Values.config.gamePort | int }}
+          protocol: UDP
+        - name: query-port
+          containerPort: {{ .Values.config.queryPort | int }}
+          protocol: UDP
+        volumeMounts:
+        - name: data-2
+          mountPath: /home/steam/enshrouded/savegame
+        securityContext:
+          allowPrivilegeEscalation: false
+          
+      volumes:
+      - name: data-2
+        persistentVolumeClaim:
+          claimName: "{{ .Chart.Name }}-data-2"

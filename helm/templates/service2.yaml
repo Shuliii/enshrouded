@@ -1,9 +1,9 @@
-apiVersion: v1
+apiVersion: v1 
 kind: Service
 metadata:
-  name: "{{ .Chart.Name }}-service"
+  name: "{{ .Chart.Name }}-service-np-2"
   labels:
-    app: "{{ .Chart.Name }}"
+    app: "{{ .Chart.Name }}-2"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -11,10 +11,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- with .Values.service.externalIPs }}
-  externalIPs: {{ . | toYaml | nindent 4 }}
-  {{- end }}
+  type: NodePort
   ports:
   - name: game-port
     port: {{ .Values.config.gamePort | int }}
@@ -31,4 +28,4 @@ spec:
     nodePort: {{ .Values.config.queryPort| int }}
     {{- end }}
   selector:
-    app: "{{ .Chart.Name }}"
+    app: "{{ .Chart.Name }}-2"
